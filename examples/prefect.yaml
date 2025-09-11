@@ -1,0 +1,41 @@
+name: northflank-example
+prefect-version: 3.1.1
+
+push:
+  - prefect_aws.deployments.steps.push_to_s3:
+      requires: prefect-aws>=0.5.12
+      bucket: my-bucket
+      folder: my-flows
+      credentials: "{{ prefect.blocks.aws-credentials.my-aws-creds }}"
+
+pull:
+  - prefect_aws.deployments.steps.pull_from_s3:
+      id: pull_from_s3
+      requires: prefect-aws>=0.5.12
+      bucket: my-bucket
+      folder: my-flows
+      credentials: "{{ prefect.blocks.aws-credentials.my-aws-creds }}"
+  - prefect.deployments.steps.set_working_directory:
+      directory: "{{ pull_from_s3.directory }}"
+
+deployments:
+  - name: example-deploy
+    description: "Example deployment using Northflank worker"
+    entrypoint: example_flow.py:hello_northflank_flow
+    parameters:
+      name: "Northflank Cloud"
+    work_pool:
+      name: my-northflank-pool
+      work_queue_name: default
+      job_variables:
+        credentials: "{{ prefect.blocks.northflank.my-creds }}"
+        project_id: "my-project"
+        cleanup_job: false
+        billing_deployment_plan: "nf-gpu-h100-80-1g"
+        billing_gpu_enabled: true
+        billing_gpu_type: "h100-80"
+        deployment_external_image_path: "prefecthq/prefect:3-python3.12"
+        settings_active_deadline_seconds: 1800
+        settings_backoff_limit: 3
+        runtime_environment:
+          PYTHONPATH: "/opt/prefect"

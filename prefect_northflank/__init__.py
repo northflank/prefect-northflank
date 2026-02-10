@@ -5,4 +5,4 @@ from .worker import (  # noqa
 from .credentials import Northflank  # noqa
 from .client import NorthflankClient  # noqa
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"

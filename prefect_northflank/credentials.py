@@ -1,5 +1,3 @@
-from typing import Optional
-
 from prefect.blocks.core import Block
 from pydantic import Field, SecretStr
 

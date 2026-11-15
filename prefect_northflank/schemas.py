@@ -94,6 +94,37 @@ class DockerConfig(BaseModel):
     )
 
 
+class EphemeralStorage(BaseModel):
+    """Ephemeral storage configuration."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    storage_size: Optional[int] = Field(
+        default=None,
+        ge=1024,
+        description="Ephemeral storage per container in MB (at least 1024)",
+        alias="storageSize",
+    )
+
+
+class StorageConfig(BaseModel):
+    """Storage configuration."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    ephemeral_storage: Optional[EphemeralStorage] = Field(
+        default=None,
+        description="Ephemeral storage configuration",
+        alias="ephemeralStorage",
+    )
+    shm_size: Optional[int] = Field(
+        default=None,
+        ge=64,
+        description="Memory-backed disk space available to /dev/shm in MB (at least 64)",
+        alias="shmSize",
+    )
+
+
 class DeploymentConfig(BaseModel):
     """Deployment configuration."""
 
@@ -106,6 +137,9 @@ class DeploymentConfig(BaseModel):
     )
     docker: Optional[DockerConfig] = Field(
         default=None, description="Docker runtime configuration"
+    )
+    storage: Optional[StorageConfig] = Field(
+        default=None, description="Ephemeral storage and /dev/shm configuration"
     )
 
 

@@ -21,7 +21,7 @@ jobs:
       - run: uv run --locked pytest -q
       - run: uv run --locked ruff check prefect_northflank tests
       - run: uv build
-      - run: uvx --from twine==6.2.0 twine check --strict dist/*
+      - run: uvx --from twine==7.0.0 twine check --strict dist/*
       - uses: actions/upload-artifact@v4
         with:
           name: python-distributions

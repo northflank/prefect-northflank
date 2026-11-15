@@ -11,7 +11,7 @@
    uv sync --locked --python 3.12
    uv run --locked pytest -q
    uv build --out-dir dist-release
-   uvx --from twine==6.2.0 twine check --strict dist-release/*
+   uvx --from twine==7.0.0 twine check --strict dist-release/*
    ```
 
 Use a new, empty output directory so that the upload cannot include distributions from an earlier release.
@@ -21,7 +21,7 @@ Use a new, empty output directory so that the upload cannot include distribution
 Run these steps only when the release is approved. Use your existing PyPI credentials; do not put credentials in repository files.
 
 ```sh
-uvx --from twine==6.2.0 twine upload dist-release/prefect_northflank-1.0.2-py3-none-any.whl dist-release/prefect_northflank-1.0.2.tar.gz
+uvx --from twine==7.0.0 twine upload dist-release/prefect_northflank-1.0.2-py3-none-any.whl dist-release/prefect_northflank-1.0.2.tar.gz
 git tag v1.0.2
 git push origin v1.0.2
 ```

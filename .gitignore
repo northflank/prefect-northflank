@@ -12,3 +12,9 @@ wheels/
 # Environment files
 .env
 .env.*
+
+# Local editor and tool state
+.idea/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/

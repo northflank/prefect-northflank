@@ -22,6 +22,17 @@ dynamic = ["version"]
 [tool.hatch.version]
 path = "prefect_northflank/__init__.py"
 
+[tool.hatch.build.targets.wheel]
+packages = ["prefect_northflank"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/prefect_northflank/*.py",
+    "/tests/*.py",
+    "/README.md",
+    "/pyproject.toml",
+]
+
 [project.entry-points."prefect.collections"]
 prefect_northflank = "prefect_northflank"
 

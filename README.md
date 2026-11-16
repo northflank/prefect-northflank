@@ -65,6 +65,7 @@ The Northflank worker uses a flattened configuration structure to work with Pref
 - `billing.deploymentPlan` → `billing_deployment_plan`
 - `deployment.external.imagePath` → `deployment_external_image_path`
 - `settings.activeDeadlineSeconds` → `settings_active_deadline_seconds`
+- `deployment.storage.ephemeralStorage.storageSize` → `deployment_storage_ephemeral_storage_size`
 
 This allows for easier configuration in YAML files and work pools while maintaining compatibility with the full Northflank API.
 
@@ -100,6 +101,9 @@ The Northflank worker supports the following configuration options:
 | **Docker Configuration** | | | |
 | `deployment_docker_config_type` | str | Docker config type | "customCommand" |
 | `deployment_docker_custom_command` | str | Custom command | None |
+| **Storage** | | | |
+| `deployment_storage_ephemeral_storage_size` | int | Ephemeral storage per container, in MB (at least 1024) | Platform default |
+| `deployment_storage_shm_size` | int | Memory-backed `/dev/shm`, in MB (at least 64) | Platform default |
 | **Runtime** | | | |
 | `runtime_environment` | Dict[str, str] | Environment variables | None |
 | **Settings** | | | |
@@ -142,6 +146,26 @@ job_variables:
   deployment_docker_config_type: "customCommand"
   deployment_docker_custom_command: "python my_script.py"
 ```
+
+### Runtime Storage
+
+Set runtime disk and shared memory sizes in your deployment's job variables:
+
+```yaml
+job_variables:
+  deployment_storage_ephemeral_storage_size: 2048
+  deployment_storage_shm_size: 256  # Optional memory-backed /dev/shm
+```
+
+The API describes these values in MB. Ephemeral storage must be at least 1024;
+shared memory must be at least 64. Unset values use the platform defaults.
+Shared memory uses RAM and is separate from the runtime disk.
+Requested sizes must fit your Northflank project's resource allowance.
+
+For an existing work pool, update its base job template to include these variables
+and their job configuration mappings, or create a new pool after upgrading the
+worker package. Deployment job variables require matching entries in the pool's
+base job template.
 
 ### Environment Variables
 
